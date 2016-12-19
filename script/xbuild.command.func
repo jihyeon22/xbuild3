@@ -1,0 +1,106 @@
+#!/bin/bash
+
+#
+# XBUILD COMMAND Functions
+#
+
+xbuild_command_get_path ()
+{
+    local cmdname="${1}"
+
+    echo `find "${XBUILD_COMMAND_PATH}" -name "${cmdname}.cmd.*"`
+}
+
+xbuild_command_get_cmds ()
+{
+    echo `find "${XBUILD_COMMAND_PATH}" -name "*.cmd.*" -exec basename {} \; \
+		| sort | sed "s,.cmd.*,,"`
+}
+
+xbuild_command_name_usage ()
+{
+    local cmdlist=( `xbuild_command_get_cmds` )
+
+    xmsg "BLANK"
+    xmsg "USAGE" "Usage: ${0} <command_name> <args ...>"
+    xmsg "USAGE" "Available commands:"
+    xmsg "USAGE" "    ${cmdlist[*]}"
+}
+
+xbuild_command_path_usage ()
+{
+    local relcmdpath=`xbuild_get_rel_path "${XBUILD_COMMAND_PATH}"`
+
+    xmsg "BLANK"
+    xmsg "USAGE" "Usage: ${0} -f <command_path> <args ...>"
+    xmsg "USAGE" "       Find command script in ${relcmdpath}"
+}
+
+xbuild_command_run ()
+{
+    if [ x"${1}" == "x-f" ]; then
+        local cmdname="${2}"
+        local cmdpath="${2}"
+        shift	# -f
+        shift	# cmdpath
+    else
+        local cmdname="${1}"
+        local cmdpath=( `xbuild_command_get_path "${cmdname}"` )
+        shift	# cmdname
+    fi
+
+    xmsg "STEP" "Run command script ..."
+    if [ -z "${cmdname}" ]; then
+        xmsg "FAILURE" "Not selected!"
+        xmsg "ERROR"   "Error: Please select command script!"
+        xrun xbuild_config_usage "${@}"
+        xrun xbuild_command_path_usage "${@}"
+        xrun xbuild_command_name_usage "${@}"
+        exit 1
+    elif [ "${#cmdpath[@]}" -ge "2" ]; then
+        xmsg "FAILURE" "Duplicated!"
+        xmsg "ERROR" "Error: Command script is duplicated. Please use -f option."
+        for cmdpath in ${cmdpath[*]} ; do
+            xmsg "ERROR" "    `xbuild_get_rel_path "${cmdpath}"`"
+        done
+        xrun xbuild_command_path_usage "${@}"
+        exit 1
+    elif [ ! -f "${cmdpath}" ]; then
+        xmsg "FAILURE" "Not found!"
+        xmsg "ERROR" "Error: ${cmdname} is not found!"
+        xrun xbuild_command_path_usage "${@}"
+        xrun xbuild_command_name_usage "${@}"
+        exit 1
+    else
+        local cmddir="$(dirname ${cmdpath})"
+        local cmdfile="$(basename ${cmdpath})"
+        local cmdext=`xbuild_get_file_ext ${cmdfile}`
+		case "${cmdext}" in
+			"mk" )
+				xmsg "SUCCESS" "Start!"
+				xmsg "BLANK"
+				xmsg "NOTICE"  "[XBUILD] ${cmdname} ${@}"
+				if [ x"${1}" == "xget" ]; then
+					if [ -n "${2}" ]; then
+					xrun export export XCFG_CORE_GIT_HASH="${2}"
+					echo "export NEOM2M_CORE_VERSION="${2}-gcc${XBUILD_CROSS_COMPILE_GCC_VER}${XCFG_DEFAULT_VER_SUFFIX}"" > ${XBUILD_WORK_CONFIG_PATH}/version.env
+					else
+					xrun export XCFG_CORE_GIT_HASH=""
+					echo "export NEOM2M_CORE_VERSION="neom2m-core-develop-gcc${XBUILD_CROSS_COMPILE_GCC_VER}${XCFG_DEFAULT_VER_SUFFIX}"" > ${XBUILD_WORK_CONFIG_PATH}/version.env
+					fi
+					xrun source "${XBUILD_WORK_CONFIG_PATH}/version.env"
+					xruntime ${MAKE} -C "${cmddir}" -f "${cmdfile}" "get" \
+					2>&1 > >(tee "${XBUILD_LOG_PATH}/${cmdfile}.log")
+				else
+					xruntime ${MAKE} -C "${cmddir}" -f "${cmdfile}" "${@}" \
+					2>&1 > >(tee "${XBUILD_LOG_PATH}/${cmdfile}.log")
+				fi
+			;;
+			* )
+				xmsg "FAILURE" "Not supported!"
+			exit 1
+			;;
+		esac
+    fi
+}
+

@@ -1,0 +1,93 @@
+#!/bin/bash
+
+#
+# XBUILD CONFIG Functions
+#
+
+xbuild_config_usage ()
+{
+    local relcfgpath=`xbuild_get_rel_path "${XBUILD_CONFIG_PATH}"`
+
+    xmsg "BLANK"
+    xmsg "USAGE" "Usage: ${0} ${1} -c <defconfig_path>"
+    xmsg "USAGE" "       Find .defconfig file in ${relcfgpath}"
+}
+
+xbuild_config_generate ()
+{
+    local cfgpath="${3}"
+
+    xmsg "STEP" "Generate xconfig files ..."
+    if [ -z "${cfgpath}" ]; then
+        xmsg "FAILURE" "Not selected!"
+        xmsg "ERROR"   "Error: Please select .defconfig file!"
+        xrun xbuild_config_usage "${@}"
+        exit 1
+    elif [ ! -f "${cfgpath}" ]; then
+        xmsg "FAILURE" "Not exists!"
+        xmsg "ERROR"   "Error: ${cfgpath} does not exists!"
+        xrun xbuild_config_usage "${@}"
+        exit 1
+    elif [ "${cfgpath##*.}" != "defconfig" ]; then
+        xmsg "FAILURE" "Wrong file type!"
+        xmsg "ERROR"   "Error: ${cfgpath} is not .defconfig file!"
+        xrun xbuild_config_usage "${@}"
+        exit 1
+    else
+        xrun x.generate.xconfig.py -m "${cfgpath}" "${XBUILD_WORK_CONFIG_PATH}/xconfig_${1}.mk" > /dev/null
+        xrun x.generate.xconfig.py -e "${cfgpath}" "${XBUILD_WORK_CONFIG_PATH}/xconfig_${1}.env" > /dev/null
+        xrun x.generate.xconfig.py -c "${cfgpath}" "${XBUILD_WORK_CONFIG_PATH}/xconfig_${1}.h" > /dev/null
+        xrun mkdir -p "$(dirname ${XBUILD_OUT_PATH}/${cfgpath})"
+        xrun cp -v "${cfgpath}" "${XBUILD_OUT_PATH}/${cfgpath}"
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_config_load ()
+{
+    xmsg "STEP" "Load configuration ..."
+    if [ ! -f "${XBUILD_WORK_CONFIG_PATH}/xconfig_${1}.env" ]; then
+        xmsg "FAILURE" "Not exists!"
+        xmsg "ERROR"   "Error: Need XBUILD configuration first!"
+        xrun xbuild_config_usage "${@}"
+        exit 1
+    else
+        xrun source "${XBUILD_WORK_CONFIG_PATH}/xconfig_${1}.env"
+        xmsg "SUCCESS" "Completed!"
+    fi
+	
+	if [ x"${1}" == "xcore" ]; then
+		xmsg "STEP" "Version Info..."
+		if [ ! -f "${XBUILD_WORK_CONFIG_PATH}/version.env" ]; then
+			echo "export NEOM2M_CORE_VERSION="neom2m-core-develop-gcc${XBUILD_CROSS_COMPILE_GCC_VER}${XCFG_DEFAULT_VER_SUFFIX}"" > ${XBUILD_WORK_CONFIG_PATH}/version.env
+		fi
+		xrun source "${XBUILD_WORK_CONFIG_PATH}/version.env"
+		xmsg "SUCCESS" $NEOM2M_CORE_VERSION
+	fi
+}
+
+xbuild_config_check ()
+{
+	if [ x"${2}" == "x-c" ]; then
+		xrun xbuild_create_dir "common" "${XBUILD_WORK_CONFIG_PATH}"
+		xrun xbuild_config_generate "${@}"
+		exit 0
+	else
+		xrun xbuild_config_load "${@}"
+	fi
+}
+
+xbuild_config_init ()
+{
+	case ${1} in
+		"core")
+		xbuild_config_check "${@}"
+		;;
+		"system")
+		xbuild_config_check "${@}"
+		;;
+		*)
+		;;
+	esac
+}
+

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+TPUT_RESET="$(tput sgr0)"
+TPUT_BOLD="$(tput bold)"
+TPUT_UNDERLINE="$(tput sgr 0 1)"
+TPUT_BLACK="$(tput setaf 0)"
+TPUT_RED="$(tput setaf 1)"
+TPUT_GREEN="$(tput setaf 2)"
+TPUT_YELLOW="$(tput setaf 3)"
+TPUT_BLUE="$(tput setaf 4)"
+TPUT_MAGENTA="$(tput setaf 5)"
+TPUT_CYAN="$(tput setaf 6)"
+TPUT_WHITE="$(tput setaf 7)"
+TPUT_INDENT="$(tput cup $(tput lines) 50)"
+TPUT_INDENT=" "
+
+xmsg ()
+{
+    local msgtype="${1}"
+    shift	# msgtype
+    local msgstring="${@}"
+
+    case "${msgtype}" in
+        "BLANK" )
+            echo "" ;;
+        "LINE" )
+            echo "===============================================================================" ;;
+        "STEP" )
+            echo -n "${TPUT_GREEN}${msgstring}${TPUT_RESET}" ;;
+        "SKIP" | "ALERT" )
+            echo "${TPUT_INDENT}${TPUT_BOLD}${TPUT_YELLOW}${msgstring}${TPUT_RESET}" ;;
+        "SUCCESS" )
+            echo "${TPUT_INDENT}${TPUT_BOLD}${TPUT_GREEN}${msgstring}${TPUT_RESET}" ;;
+        "FAILURE" )
+            echo "${TPUT_INDENT}${TPUT_BOLD}${TPUT_RED}${msgstring}${TPUT_RESET}" ;;
+        "ERROR" )
+            echo "${TPUT_BOLD}${TPUT_RED}${msgstring}${TPUT_RESET}" ;;
+        "USAGE" | "INFO" )
+            echo "${TPUT_YELLOW}${msgstring}${TPUT_RESET}" ;;
+        "NOTICE" )
+            echo "${TPUT_BOLD}${TPUT_CYAN}${msgstring}${TPUT_RESET}" ;;
+        "LOG" )
+            echo "${msgstring}" ;;
+        * )
+            echo "${TPUT_UNDERLINE}${TPUT_RED}Wrong message type!${TPUT_RESET}" ;;
+    esac
+}
+
+xdbgmsg ()
+{
+    local dbgstring="${@}"
+
+    if [ "${XDBG}" == "on" ]; then
+        echo "${TPUT_BOLD}${dbgstring}${TPUT_RESET}"
+    fi
+}
+

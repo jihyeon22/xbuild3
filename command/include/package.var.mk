@@ -1,0 +1,25 @@
+
+# Tools
+PKG_HOSTCC	:= /usr/bin/gcc
+PKG_CROSS_COMPILE_PREFIX	:= ${XBUILD_CROSS_COMPILE_PREFIX}
+PKG_CC		:= $(PKG_CROSS_COMPILE_PREFIX)gcc
+PKG_AR		:= $(PKG_CROSS_COMPILE_PREFIX)ar
+PKG_STRIP	:= $(PKG_CROSS_COMPILE_PREFIX)strip
+PKG_INSTALL	:= PATH=${XBUILD_CROSS_COMPILE_PATH}/${XBUILD_CROSS_COMPILE_PREFIX_NODASH}/bin /usr/bin/install -c
+
+PKG_EXTRA_CFLAG := ${XBUILD_CROSS_COMPILE_EXTRA_CFLAGS}
+
+# System types
+# ex. arch-vendor-kernel-platform
+PKG_BUILD	:= $(shell $(PKG_HOSTCC) -dumpmachine)
+PKG_HOST	:= $(shell $(PKG_CC) -dumpmachine)
+PKG_TARGET	:= $(PKG_HOST)
+
+# Flags
+PKG_CFLAGS	:= -I${XBUILD_OUT_ROOT_PATH}/usr/include
+PKG_CFLAGS	+= ${PKG_EXTRA_CFLAG}
+PKG_LDFLAGS	:= -L${XBUILD_OUT_ROOT_PATH}/usr/lib
+
+# Kernel
+PKG_KERNEL_PATH	:= ${XBUILD_WORK_PATH}/core/qlinux
+

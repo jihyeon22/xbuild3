@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# common XBUILD functions
+source "${XBUILD_SCRIPT_PATH}/xmsg.func"
+source "${XBUILD_SCRIPT_PATH}/xrun.func"
+
+# XBUILD functions
+source "${XBUILD_SCRIPT_PATH}/xbuild.debug.func"
+source "${XBUILD_SCRIPT_PATH}/xbuild.utils.func"
+source "${XBUILD_SCRIPT_PATH}/xbuild.config.func"
+source "${XBUILD_SCRIPT_PATH}/xbuild.tool.func"
+source "${XBUILD_SCRIPT_PATH}/xbuild.log.func"
+source "${XBUILD_SCRIPT_PATH}/xbuild.command.func"
+

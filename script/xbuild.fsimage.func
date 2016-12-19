@@ -1,0 +1,269 @@
+#!/bin/bash
+
+#
+# XBUILD FSIMAGE Functions
+#
+
+###############################################################################
+# ext2 functions
+
+xbuild_fsimage_create_ext2img ()
+{
+    local imgpath="${1}"
+    local rootpath="${2}"
+    local devtable="${3}"
+    local inodenum="${4}"
+    local blocksize="${5}"
+	
+	xrun echo "imgpath is ${imgpath}"
+	xrun echo "rootpath is ${rootpath}"
+	xrun echo "devtable is ${devtable}"
+	xrun echo "inodenum is ${inodenum}"
+	xrun echo "blocksize is ${blocksize}"
+
+    xrun fakeroot genext2fs -d ${rootpath} \
+	-D ${devtable} \
+	-N ${inodenum} \
+	-b ${blocksize} \
+	${imgpath}
+}
+
+xbuild_fsimage_mount_ext2img ()
+{
+    local imgpath="${1}"
+    local mntpath="${2}"
+
+    xrun sudo mount -v -t ext2 "${imgpath}" "${mntpath}"
+}
+
+xbuild_fsimage_umount_ext2img ()
+{
+    local imgpath="${1}"
+    local mntpath="${2}"
+
+    xrun sudo umount -v ${mntpath}
+}
+
+###############################################################################
+# jffs2 functions
+
+xbuild_fsimage_create_jffs2img ()
+{
+    local imgpath="${1}"
+    local rootpath="${2}"
+    local devtable="${3}"
+    local eraseblksize="${4}"
+
+    xrun fakeroot mkfs.jffs2 -qU -r "${rootpath}" \
+	-D "${devtable}" \
+	-e "${eraseblksize}" \
+	-o "${imgpath}.tmp"
+
+    xrun sumtool -i "${imgpath}.tmp" \
+	-e "${eraseblksize}" \
+	-o "${imgpath}"
+
+    xrun rm -f "${imgpath}.tmp"
+}
+
+xbuild_fsimage_create_jffs2_nullimg ()
+{
+    local imgpath="${1}"
+    local rootpath="${2}"
+    local eraseblksize="${3}"
+
+    xrun fakeroot mkfs.jffs2 -qU -r "${rootpath}" \
+	-e "${eraseblksize}" \
+	-o "${imgpath}.tmp"
+
+    xrun sumtool -i "${imgpath}.tmp" \
+	-e "${eraseblksize}" \
+	-o "${imgpath}"
+
+    xrun rm -f "${imgpath}.tmp"
+}
+
+xbuild_fsimage_unload_mtdblock_mod ()
+{
+    xmsg "STEP" "Unload mtdblock module ..."
+    xrun sudo modprobe -r mtdblock
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_unload_jffs2_mod ()
+{
+    xmsg "STEP" "Unload jffs2 module ..."
+    xrun sudo modprobe -r jffs2
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_unload_mtdram_mod ()
+{
+    xmsg "STEP" "Unload mtdram module ..."
+    xrun sudo modprobe -r mtdram
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_load_mtdblock_mod ()
+{
+    xmsg "STEP" "Load mtdblock module ..."
+    xrun sudo modprobe mtdblock
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_load_jffs2_mod ()
+{
+    xmsg "STEP" "Load jffs2 module ..."
+    xrun sudo modprobe jffs2
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+        xrun xbuild_fsimage_unload_mtdblock_mod
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_load_mtdram_mod ()
+{
+    xmsg "STEP" "Load mtdram module ..."
+    xrun sudo modprobe mtdram total_size="${mtdramsize}"
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+        xrun xbuild_fsimage_unload_jffs2_mod
+        xrun xbuild_fsimage_unload_mtdblock_mod
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_get_mtd_dev ()
+{
+    cat /proc/mtd | grep mtd | awk '{print $1}' | sed "s,:,,"
+}
+
+xbuild_fsimage_mount_jffs2img ()
+{
+    local imgpath="${1}"
+    local mntpath="${2}"
+    local partitionsize="${3}"
+    #local mtdramsize=$((${partitionsize}/1024))
+    local mtdramsize="${partitionsize}"
+
+    sudo true
+
+    xrun xbuild_fsimage_load_mtdblock_mod
+    xrun xbuild_fsimage_load_jffs2_mod
+    xrun xbuild_fsimage_load_mtdram_mod "${mtdramsize}"
+
+    xmsg "STEP" "Copy jffs2 image to /dev/mtdblock0 ..."
+    xmsg "BLANK"
+    xrun sudo dd if="${imgpath}" of=/dev/mtdblock0
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+        xrun xbuild_fsimage_unload_mtdram_mod
+        xrun xbuild_fsimage_unload_jffs2_mod
+        xrun xbuild_fsimage_unload_mtdblock_mod
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+
+    xmsg "STEP" "Mount /dev/mtdblock0 to ${mntpath} ..."
+    sudo mount -t jffs2 /dev/mtdblock0 "${mntpath}"
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+        xrun xbuild_fsimage_unload_mtdram_mod
+        xrun xbuild_fsimage_unload_jffs2_mod
+        xrun xbuild_fsimage_unload_mtdblock_mod
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_fsimage_umount_jffs2img ()
+{
+    local imgpath="${1}"
+    local mntpath="${2}"
+
+    sudo true
+
+    xmsg "STEP" "Unmount /dev/mtdblock0 ..."
+    xrun sudo umount /dev/mtdblock0
+    if [ "${?}" -ne "0" ]; then
+        xmsg "FAILURE" "Error!"
+    else
+        xmsg "SUCCESS" "Completed!"
+    fi
+
+    xrun xbuild_fsimage_unload_mtdram_mod
+    xrun xbuild_fsimage_unload_jffs2_mod
+    xrun xbuild_fsimage_unload_mtdblock_mod
+}
+
+xbuild_fsimage_create_headerblk ()
+{
+    local blkpath="${1}"
+    local blksize="${1}"
+    local value="${2}"
+
+    xrun rm -f ${blkpath}
+    xrun echo -n -e "\xaa\xbb\xcc\xdd\xee\xff\x01\x28" >> ${blkpath}
+    xrun dd if=/dev/zero of=${recovery_imgpath}.${block}.${page} \
+            ibs=1 obs=1 seek=$(wc -c ${blkpath}) count=2040
+}
+
+xbuild_fsimage_create_reservedblk ()
+{
+    local block="${1}"
+    local page="${2}"
+
+    xrun dd if=/dev/zero of=${recovery_imgpath}.${block}.${page} bs=2048 count=1
+}
+
+xbuild_fsimage_create_recoveryimg ()
+{
+    local qfit="${1}"
+    local imgpath="${2}"
+    local imgsize="$(ls -l ${imgpath} | awk '{print $5}')"
+    local pagesize=2048
+    local blocksize=131072
+    local hdrpath="${XBUILD_OUT_PATH}/qfit/${qfit}/nandfs_header.mbn"
+    local outpath="${XBUILD_OUT_PATH}/qfit/${qfit}/nandfs.mbn"
+
+    xmsg "STEP" "Create recovery image ..."
+	xrun xbuild_create_dir "common" "${XBUILD_OUT_PATH}/qfit/${qfit}"
+
+    xrun rm -f ${hdrpath}
+    # block 0, page 0: image recovery flag (=0x01)
+    # done=0x18, notdone=0x28
+    xrun echo -n -e "\xaa\xbb\xcc\xdd\xee\xff\x01\x28" > ${hdrpath}-0.0
+    # block 0, page 1: image rewrite count (=0x02)
+    # count=0
+    xrun echo -n -e "\xaa\xbb\xcc\xdd\xee\xff\x02\x00" > ${hdrpath}-0.1
+    # block 1, page 0: image size (input 0x0a at the end)
+    xrun echo -n -e "${imgsize}\x0a" > ${hdrpath}-1.0
+
+    xrun rm -f ${outpath}
+    xrun dd if=${hdrpath}-0.0 of=${outpath} bs=${pagesize} seek=0
+    xrun dd if=${hdrpath}-0.1 of=${outpath} bs=${pagesize} seek=1
+    xrun dd if=${hdrpath}-1.0 of=${outpath} bs=${pagesize} seek=2
+    xrun dd if=${imgpath} of=${outpath} bs=${pagesize} seek=64
+
+    xmsg "SUCCESS" "Completed!"
+}
+

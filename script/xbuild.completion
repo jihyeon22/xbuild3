@@ -1,0 +1,69 @@
+# bash completion for xbuild
+
+xbuild_get_cmdpath ()
+{
+    local cmdname="${1}"
+
+    echo `find ./command -name "${cmdname}.cmd.*"`
+}
+
+xbuild_get_cmdnames ()
+{
+    echo `find ./command -name "*.cmd.*" -exec basename {} \; \
+		| sort | sed "s,.cmd.*,,"`
+# | sed "s, ,|,g"
+}
+
+_xbuild()
+{
+    #local file makef makef_dir="." makef_inc cur prev i split=false
+    local cur prev i split=false
+    local cmdname cmdpath
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
+    _split_longopt && split=true
+
+    case $prev in
+        -c|-f)
+            _filedir
+            return 0
+            ;;
+    esac
+
+    $split && return 0
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-c -f' -- "$cur" ) )
+    else
+        COMPREPLY=( $( compgen -W "`xbuild_get_cmdnames`" -- "$cur" ) )
+
+        for (( i=0; i < ${#COMP_WORDS[@]}; i++ )); do
+            # eval for tilde expansion
+            eval cmdname=${COMP_WORDS[i+1]}
+            break
+        done
+
+        [ -n "$cmdname" ] && cmdpath="`xbuild_get_cmdpath ${cmdname}`"
+    fi
+
+    $split && return 0
+
+    if [[ -f "$cmdpath" ]]; then
+        COMPREPLY=( $( compgen -W "$( make -qp -f $cmdpath 2>/dev/null | \
+            awk -F':' '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/ \
+            {split($1,A,/ /);for(i in A)print A[i]}' )" \
+            -- "$cur" ) )
+    fi
+} &&
+complete -F _xbuild xbuild3
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
+

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#
+# XBUILD TOOL Functions
+#
+
+xbuild_tool_load ()
+{
+    xmsg "STEP" "Load tool setting ..."
+    if [ ! -f "${XBUILD_TOOL_PATH}/tool.env" ]; then
+        xmsg "FAILURE" "Not exists!"
+        local reltoolpath=`xbuild_get_rel_path "${XBUILD_TOOL_PATH}"`
+        xmsg "ERROR" "Error: Need the ${reltoolpath}/tool.env file"
+        xmsg "ERROR" "       Create tool.env file with tool path setting"
+        exit 1
+    else
+        xrun source "${XBUILD_TOOL_PATH}/tool.env"
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_tool_init ()
+{
+    local command="${1}"
+
+    xrun xbuild_tool_load "${@}"
+}
+

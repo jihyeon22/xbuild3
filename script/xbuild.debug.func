@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#
+# XBUILD DEBUG Functions
+#
+
+xbuild_debug_init ()
+{
+    if [ "${XBUILD_DEBUG}" == "on" ]; then
+        export XDBG="on"
+        export Q=""
+        export MAKE="/usr/bin/make"
+    else
+        export XDBG="off"
+        export Q="@"
+        export MAKE="/usr/bin/make --no-print-directory"
+    fi
+}
+

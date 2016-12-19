@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#
+# XBUILD UTILS Functions
+#
+
+xbuild_create_dir ()
+{
+    local name="${1}"
+    local path="${2}"
+
+    xmsg "STEP" "Create XBUILD ${name} directory ..."
+    if [ -z "${path}" ]; then
+        xmsg "FAILURE" "Not selected path!"
+        exit 1
+    elif [ -e "${path}" ]; then
+        xmsg "SKIP"    "Already exists!"
+    else
+        xrun mkdir -p "${path}"
+        xmsg "SUCCESS" "Completed!"
+    fi
+}
+
+xbuild_get_file_ext ()
+{
+    local file="${1}"
+
+    echo "${file##*.}"
+}
+
+xbuild_get_rel_path ()
+{
+    local path="${1}"
+
+    echo "./${path#${XBUILD_TOP_PATH}/}"
+}
+

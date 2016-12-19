@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#
+# XBUILD LOG Functions
+#
+
+xbuild_log_init ()
+{
+    xrun xbuild_create_dir "log" "${XBUILD_LOG_PATH}"
+}
+
+xbuild_log_clear ()
+{
+    local logpath="${1}"
+
+    xrun rm -f "${logpath}"
+}
+
+xbuild_log_write_env ()
+{
+    local logpath="${1}"
+
+    xrun env | grep "XBUILD_"	>> "${logpath}"
+    xrun env | grep "XCFG_"	>> "${logpath}"
+}
+

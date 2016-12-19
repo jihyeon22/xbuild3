@@ -1,0 +1,28 @@
+
+# Tools
+SYS_HOSTCC	:= /usr/bin/gcc
+SYS_CROSS_COMPILE_PREFIX	:= ${XBUILD_CROSS_COMPILE_PREFIX}
+SYS_CC		:= $(SYS_CROSS_COMPILE_PREFIX)gcc
+SYS_AR		:= $(SYS_CROSS_COMPILE_PREFIX)ar
+SYS_STRIP	:= $(SYS_CROSS_COMPILE_PREFIX)strip
+SYS_INSTALL	:= PATH=${XBUILD_CROSS_COMPILE_PATH}/${XBUILD_CROSS_COMPILE_PREFIX_NODASH}/bin /usr/bin/install -c
+
+SYS_CROSS_COMPILE_VER := ${XBUILD_CROSS_COMPILE_GCC_VER}
+
+# System types
+# ex. arch-vendor-kernel-platform
+SYS_BUILD	:= $(shell $(SYS_HOSTCC) -dumpmachine)
+SYS_HOST	:= $(shell $(SYS_CC) -dumpmachine)
+SYS_TARGET	:= $(SYS_HOST)
+
+# Flags
+SYS_CFLAGS	:= \
+		${XBUILD_CROSS_COMPILE_EXTRA_CFLAGS} \
+		-I${XBUILD_OUT_ROOT_PATH}/usr/local/include \
+		-I${XBUILD_OUT_ROOT_PATH}/usr/include \
+		-I${XBUILD_OUT_ROOT_PATH}/include
+SYS_LDFLAGS	:= \
+		-L${XBUILD_OUT_ROOT_PATH}/usr/local/lib \
+		-L${XBUILD_OUT_ROOT_PATH}/usr/lib \
+		-L${XBUILD_OUT_ROOT_PATH}/lib
+

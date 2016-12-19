@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# XBUILD directories
+export XBUILD_TOP_PATH="${PWD}"
+export XBUILD_CONFIG_PATH="${XBUILD_TOP_PATH}/config"
+export XBUILD_TOOL_PATH="${XBUILD_TOP_PATH}/tool"
+export XBUILD_SCRIPT_PATH="${XBUILD_TOP_PATH}/script"
+export XBUILD_COMMAND_PATH="${XBUILD_TOP_PATH}/command"
+
+# XBUILD LOG directories
+export XBUILD_LOG_PATH="${XBUILD_TOP_PATH}/log"
+
+# XBUILD WORK directories
+export XBUILD_WORK_PATH="${XBUILD_TOP_PATH}/work"
+export XBUILD_WORK_CONFIG_PATH="${XBUILD_WORK_PATH}/config"
+export XBUILD_WORK_MOUNT_PATH="${XBUILD_WORK_PATH}/mount"
+
+# XBUILD OUTPUT directories
+export XBUILD_OUT_PATH="${XBUILD_TOP_PATH}/out"
+export XBUILD_OUT_ROOT_PATH="${XBUILD_TOP_PATH}/out/root/system/mds"
+export XBUILD_OUT_RAMDISK_NAND_ROOT_PATH="${XBUILD_TOP_PATH}/out/root.data"
+
+# XBUILD environments and functions
+source "${XBUILD_SCRIPT_PATH}/xbuild.env"
+source "${XBUILD_SCRIPT_PATH}/xbuild.func"
+
+# Initialize XBUILD debugging
+xrun xbuild_debug_init "${@}"
+
+# Initialize XBUILD configuration
+xrun xbuild_config_init "${@}"
+
+# Initialize XBUILD tool setting
+xrun xbuild_tool_init "${@}"
+
+# Initialize XBUILD logging
+xrun xbuild_log_init "${@}"
+
+# Run XBUILD command
+xrun xbuild_command_run "${@}"
+
