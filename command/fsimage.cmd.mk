@@ -52,6 +52,9 @@ diet:
 create:		$(dir $(FSIMG_IMAGE_PATH)) \
 		$(FSIMG_ROOT_PATH)
 	$(Q)rm -rf ${XBUILD_OUT_PATH}/mds-fsimg-$(DATE).tar.gz
+	$(Q)rm -rf $(FSIMG_ROOT_PATH)/../mds/fsimg-date*
+	$(Q)touch $(FSIMG_ROOT_PATH)/../mds/fsimg-date
+	$(Q)echo "build date : $(DATE)" >>  $(FSIMG_ROOT_PATH)/../mds/fsimg-date
 	$(Q)tar cvfz ${XBUILD_OUT_PATH}/mds-fsimg-$(DATE).tar.gz -C $(FSIMG_ROOT_PATH)/../ . 
 #	$(Q)cd -
 
