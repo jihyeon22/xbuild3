@@ -39,6 +39,8 @@ XCFG_PLATFORM_USE_defaultsetting=y
 #
 XCFG_APPLICATION_GIT_PATH="evo@src-server:/home/data/git/neom2m/app3"
 
+XCFG_APPLICATION_USE_common-src3=y
+XCFG_APPLICATION_GIT_HASH_common-src3=""
 
 XCFG_APPLICATION_USE_dmlib3=y
 XCFG_APPLICATION_GIT_HASH_dmlib3=""
@@ -84,8 +86,6 @@ XCFG_APPLICATION_GIT_HASH_emer3=""
 #
 # User Application
 #
-XCFG_APPLICATION_USE_common-src3=y
-XCFG_APPLICATION_GIT_HASH_common-src3=""
 
 XCFG_APPLICATION_USE_bootstrap3=y
 XCFG_APPLICATION_GIT_HASH_bootstrap3=""
