@@ -5,7 +5,7 @@
 # Common
 #
 # S -> sk / K -> kt / L -> lg
-XCFG_BOARD=TX501S
+XCFG_BOARD=TL500S
 
 #
 # External
