@@ -1,5 +1,5 @@
-#./xbuild3 gtrack3 CORP=kt SERVER=fms1 VER=01.01
-#./xbuild3 system CORP=kt SERVER=fms1 VER=01.01
+#./xbuild3 gtrack3 CORP=kt SERVER=ktfms VER=01.01
+#./xbuild3 system CORP=kt SERVER=ktfms VER=01.01
 
 #
 # Common
