@@ -11,12 +11,12 @@
 # - GPS ONLY MODEL
 
 # test server for kt iot certi.
-# ./xbuild3 gtrack3 CORP=kt SERVER=ktfms SUB=ktfms1 VER=01.01 KT_FOTA=1 KT_FOTA_TEST_SVR=1
-# ./xbuild3 system CORP=kt SERVER=ktfms SUB=ktfms1 VER=01.01 KT_FOTA=1 KT_FOTA_TEST_SVR=1
+# ./xbuild3 gtrack3 CORP=kt SERVER=ktfms SUB=fms1 VER=01.01 KT_FOTA=1 KT_FOTA_TEST_SVR=1
+# ./xbuild3 system CORP=kt SERVER=ktfms SUB=fms1 VER=01.01 KT_FOTA=1 KT_FOTA_TEST_SVR=1
 
 # COMMERCIAL 
-# ./xbuild3 gtrack3 CORP=kt SERVER=ktfms SUB=ktfms1 VER=01.01 KT_FOTA=1
-# ./xbuild3 system CORP=kt SERVER=ktfms SUB=ktfms1 VER=01.01 KT_FOTA=1
+# ./xbuild3 gtrack3 CORP=kt SERVER=ktfms SUB=fms1 VER=01.01 KT_FOTA=1
+# ./xbuild3 system CORP=kt SERVER=ktfms SUB=fms1 VER=01.01 KT_FOTA=1
 
 
 ###############################
