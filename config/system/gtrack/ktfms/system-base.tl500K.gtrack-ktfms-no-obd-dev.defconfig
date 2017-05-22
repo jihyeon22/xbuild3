@@ -1,5 +1,11 @@
-#./xbuild3 gtrack3 CORP=kt SERVER=ktfms VER=01.01
-#./xbuild3 system CORP=kt SERVER=ktfms VER=01.01
+# test server for kt iot certi.
+#./xbuild3 gtrack3 CORP=kt SERVER=ktfms VER=01.01 KT_FOTA=1 KT_FOTA_TEST_SVR=1
+#./xbuild3 system CORP=kt SERVER=ktfms VER=01.01 KT_FOTA=1 KT_FOTA_TEST_SVR=1
+
+# COMMERCIAL 
+#./xbuild3 gtrack3 CORP=kt SERVER=ktfms VER=01.01 KT_FOTA=1
+#./xbuild3 system CORP=kt SERVER=ktfms VER=01.01 KT_FOTA=1
+
 
 #
 # Common
