@@ -1,5 +1,14 @@
 #./xbuild3 gtrack3 CORP=gtrs SERVER=dtg-skel VER=01.01 DTG_SERVER=gtrs DTG_MODEL=innocar
 #./xbuild3 system CORP=gtrs SERVER=dtg-skel VER=01.01 DTG_SERVER=gtrs DTG_MODEL=innocar
+#./xbuild3 app CORP=gtrs SERVER=dtg-skel VER=01.01 DTG_SERVER=gtrs DTG_MODEL=innocar
+
+#or 
+
+# gtrace modem mdt enable
+#./xbuild3 gtrack3 CORP=gtrs SERVER=gtrace VER=01.01 DTG_SERVER=gtrs DTG_MODEL=innocar
+#./xbuild3 system CORP=gtrs SERVER=gtrace VER=01.01 DTG_SERVER=gtrs DTG_MODEL=innocar
+#./xbuild3 app CORP=gtrs SERVER=gtrace VER=01.01 DTG_SERVER=gtrs DTG_MODEL=innocar
+
 
 #
 # Common

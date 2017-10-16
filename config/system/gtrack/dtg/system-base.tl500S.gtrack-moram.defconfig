@@ -1,6 +1,9 @@
-#./xbuild3 gtrack3 CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar
-#./xbuild3 app CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar
-#./xbuild3 system CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar
+# How to build for DTG
+#./xbuild3 gtrack3 CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=dtg_mdt
+#./xbuild3 app CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=dtg_mdt
+#./xbuild3 system CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=dtg_mdt
+
+
 
 #
 # Common
