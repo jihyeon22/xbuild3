@@ -1,8 +1,29 @@
 # How to build for DTG
-#./xbuild3 gtrack3 CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=dtg_mdt
-#./xbuild3 app CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=dtg_mdt
-#./xbuild3 system CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=dtg_mdt
 
+# ----------------------------------------------
+# MDT + INNOCAR DTG + Keypad
+# ----------------------------------------------
+#./xbuild3 gtrack3 CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=moram0
+#./xbuild3 app CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=moram0
+#./xbuild3 system CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=moram0
+
+# how to make package
+# Coporation : moram
+# Service Mode : select dtg (no mdt)
+# Server Model : moram0
+
+
+# ----------------------------------------------
+# MDT + INNOCAR DTG + Temperature
+# ----------------------------------------------
+#./xbuild3 gtrack3 CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=moram1
+#./xbuild3 app CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=moram1
+#./xbuild3 system CORP=moram SERVER=moram VER=01.01 DTG_SERVER=moram DTG_MODEL=innocar SUB=moram1
+
+# how to make package
+# Coporation : moram
+# Service Mode : select dtg (no mdt)
+# Server Model : moram1
 
 
 #
