@@ -12,6 +12,7 @@ XCFG_EXTERNAL_WEB_PATH="http://src-server/downloads/packages"
 #XCFG_EXTERNAL_USE_busybox=y
 #XCFG_EXTERNAL_USE_bash=y
 XCFG_EXTERNAL_USE_zlib=y
+XCFG_EXTERNAL_USE_prebuilt-openssl-tl500=y
 #XCFG_EXTERNAL_USE_openssl=y
 #XCFG_EXTERNAL_USE_openssh=y
 #XCFG_EXTERNAL_USE_mgetty=y
