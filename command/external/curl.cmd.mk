@@ -10,7 +10,7 @@ PKG_OFFICIAL_REPO	:= $(PKG_OFFICIAL_URL)/download
 PKG_NAME	:= curl
 PKG_VERSION	:= 7.30.0
 PKG_DIRNAME	:= $(PKG_NAME)-$(PKG_VERSION)
-PKG_DEPEND	:= zlib
+PKG_DEPEND	:= zlib prebuilt-openssl-tl500
 
 PKG_SOURCE	:= $(PKG_DIRNAME).tar.bz2
 PKG_PATCHES	:= $(PKG_DIRNAME)-mds.patch
@@ -44,7 +44,7 @@ prepare:	check_pkg_dependency $(PKG_WORK_DIR)
 		--disable-dict --disable-gopher \
 		--disable-imap --disable-imaps --disable-pop3 --disable-pop3s \
 		--disable-rtsp --disable-smtp --disable-smtps \
-		--disable-telnet --disable-tftp --without-ssl
+		--disable-telnet --disable-tftp --with-ssl=$(PKG_INSTALL_DIR)/usr
 
 compile:	check_pkg_dependency $(PKG_WORK_DIR)/Makefile
 	$(Q)cd $(PKG_WORK_DIR) && \
