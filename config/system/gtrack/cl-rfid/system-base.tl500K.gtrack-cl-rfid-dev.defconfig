@@ -1,19 +1,30 @@
 #./xbuild3 system CORP=cl SERVER=cl-rfid VER=01.51 SUB=clr1
 #./xbuild3 gtrack3 CORP=cl SERVER=cl-rfid VER=01.51 SUB=clr1
 
-##################
-# SUB
-##################
-# SUB=clr0 : rfid + 위치관제 => 현대서버
-# SUB=clr1 : rfid + 위치관제 => CL 서버
 
-# SUB=clra0 : rfid + 위치관제 + 모본 ADAS => CL 서버
-# SUB=clra1 : rfid + 위치관제 + 모본 ADAS => 현대서버
-# SUB=clra9 : rfid + 위치관제 + 모본 ADAS => 테스트서버
+####################
+# kjtec rfid only
+####################
 
-# SUB=clrb0 : rfid + 위치관제 + 모빌아이 ADAS => CL 서버
-# SUB=clrb1 : rfid + 위치관제 + 모빌아이 ADAS => 현대서버
-# SUB=clra9 : rfid + 위치관제 + 모본 ADAS => 테스트서버
+# SUB=clr0 : kjtec rfid + 위치관제 => 현대서버
+# SUB=clr1 : kjtec rfid + 위치관제 => CL 서버
+
+####################
+# kjtec rfid + adas 
+####################
+# SUB=clra0 : kjtec rfid + 위치관제 + 모본 ADAS => CL 서버
+# SUB=clra1 : kjtec rfid + 위치관제 + 모본 ADAS => 현대서버
+# SUB=clra9 : kjtec rfid + 위치관제 + 모본 ADAS => 테스트서버
+
+# SUB=clrb0 : kjtec rfid + 위치관제 + 모빌아이 ADAS => CL 서버
+# SUB=clrb1 : kjtec rfid + 위치관제 + 모빌아이 ADAS => 현대서버
+# SUB=clra9 : kjtec rfid + 위치관제 + 모본 ADAS => 테스트서버
+
+####################
+# sup rfid only
+####################
+# SUB=clrc9 : sup rfid + 위치관제 => 테스트서버
+
 
 #
 # Common
