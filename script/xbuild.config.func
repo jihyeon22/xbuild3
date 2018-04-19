@@ -16,6 +16,7 @@ xbuild_config_usage ()
 xbuild_config_generate ()
 {
     local cfgpath="${3}"
+    local cfgpath_dirname="$(dirname $cfgpath)"
 
     xmsg "STEP" "Generate xconfig files ..."
     if [ -z "${cfgpath}" ]; then
@@ -39,6 +40,11 @@ xbuild_config_generate ()
         xrun x.generate.xconfig.py -c "${cfgpath}" "${XBUILD_WORK_CONFIG_PATH}/xconfig_${1}.h" > /dev/null
         xrun mkdir -p "$(dirname ${XBUILD_OUT_PATH}/${cfgpath})"
         xrun cp -v "${cfgpath}" "${XBUILD_OUT_PATH}/${cfgpath}"
+        
+        ## copy sh files..
+        xrun find ${cfgpath_dirname} -name  "*.sh" | xargs chmod 777
+        xrun find ${cfgpath_dirname} -name  "*.sh" | xargs cp -t ${XBUILD_TOP_PATH}
+
         xmsg "SUCCESS" "Completed!"
     fi
 }
