@@ -5,7 +5,7 @@ BUILD_ARG__SERVER=cl-rfid
 ######################################
 # edit plz..
 ######################################
-BUILD_ARG__VER=xx.yy
+BUILD_ARG__VER=xx.xx
 BUILD_ARG__AUTO_PKG=y
 #BUILD_ARG__AUTO_PKG=n
 #BUILD_ARG__SUB=alm1
@@ -32,7 +32,7 @@ BUILD_ARG__AUTO_PKG=y
 ####################
 # sup rfid only
 ####################
-# SUB=clrc9 : sup rfid + 위치관제 => 테스트서버
+# SUB=clrc9 : suprema rfid + 위치관제 => 테스트서버
 
 ###########################################
 # using help
@@ -44,16 +44,18 @@ BUILD_ARG__AUTO_PKG=y
 echo -e "--------------------------------------------------"
 echo -e "BUILD TARGET"
 echo -e "--------------------------------------------------"
-echo -e "01. kjtec rfid + MDT => 현대서버"
-echo -e "02. kjtec rfid + MDT => CL서버"
+echo -e "01. (clr0) kjtec rfid + MDT => CL서버"
+echo -e "02. (clr1) kjtec rfid + MDT => 현대서버"
 echo -e "--------------------------------------------------"
-echo -e "11. kjtec rfid + 위치관제 + 모본 ADAS => CL 서버"
-echo -e "12. kjtec rfid + 위치관제 + 모본 ADAS => 현대서버"
-echo -e "13. kjtec rfid + 위치관제 + 모본 ADAS => 테스트서버"
+echo -e "11. (clra0) kjtec rfid + MDT + 모본 ADAS => CL 서버"
+echo -e "12. (clra1) kjtec rfid + MDT + 모본 ADAS => 현대서버"
+echo -e "13. (clra9) kjtec rfid + MDT + 모본 ADAS => 테스트서버"
 echo -e "--------------------------------------------------"
-echo -e "21. kjtec rfid + 위치관제 + 모빌아이 ADAS => CL 서버"
-echo -e "22. kjtec rfid + 위치관제 + 모빌아이 ADAS => 현대서버"
-echo -e "23. kjtec rfid + 위치관제 + 모빌아이 ADAS => 테스트서버"
+echo -e "21. (clrb0) kjtec rfid + MDT + 모빌아이 ADAS => CL 서버"
+echo -e "22. (clrb1) kjtec rfid + MDT + 모빌아이 ADAS => 현대서버"
+echo -e "23. (clrb9) kjtec rfid + MDT + 모빌아이 ADAS => 테스트서버"
+echo -e "--------------------------------------------------"
+echo -e "31. (clrc0) suprema rfid + MDT => CL 서버"
 echo -e "--------------------------------------------------"
 echo -e "select data > "
 
@@ -82,6 +84,9 @@ case $SELECT_BUILD in
     ;;
     23)
         BUILD_ARG__SUB="clrb9"
+    ;;
+    31)
+        BUILD_ARG__SUB="clrc0"
     ;;
     *)
         echo "INVAILD SELECT!!!!!!!!!!!!!!!!!!!!!!! BYE"
