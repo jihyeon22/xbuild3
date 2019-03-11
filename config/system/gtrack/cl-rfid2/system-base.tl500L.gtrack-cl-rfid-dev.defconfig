@@ -1,6 +1,7 @@
 #./xbuild3 system CORP=cl SERVER=cl-rfid VER=01.51 SUB=clr1
 #./xbuild3 gtrack3 CORP=cl SERVER=cl-rfid VER=01.51 SUB=clr1
 
+
 ####################
 # kjtec rfid only
 ####################
@@ -30,12 +31,11 @@
 # SUB=clre0 : qrcode + 위치관제 => 테스트서버
 
 
-
 #
 # Common
 #
 # S -> sk / K -> kt / L -> lg
-XCFG_BOARD=TL500S
+XCFG_BOARD=TL500L
 
 #
 # External
