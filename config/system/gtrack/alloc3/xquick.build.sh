@@ -25,7 +25,8 @@ echo -e "--------------------------------------------------"
 echo -e "1. 중고차 위치관제"
 echo -e "2. 중고차 위치관제 + powersave"
 echo -e "3. BCM / OBD 연동 카쉐어링"
-echo -e "4. shuttle"
+echo -e "4. DSME Shuttle bus"
+echo -e "5. DSME Shuttle bus - Test sever"
 echo -e "select data > "
 
 read SELECT_BUILD
@@ -45,6 +46,10 @@ case $SELECT_BUILD in
     ;;
 	4)
         BUILD_ARG__SUB="alc3"
+        RUN_CMD="./xbuild3 $1 CORP=${BUILD_ARG__CORP} SERVER=${BUILD_ARG__SERVER} VER=${BUILD_ARG__VER} SUB=${BUILD_ARG__SUB} AUTO_PKG=${BUILD_ARG__AUTO_PKG} $2"
+    ;;
+	5)
+        BUILD_ARG__SUB="alc4"
         RUN_CMD="./xbuild3 $1 CORP=${BUILD_ARG__CORP} SERVER=${BUILD_ARG__SERVER} VER=${BUILD_ARG__VER} SUB=${BUILD_ARG__SUB} AUTO_PKG=${BUILD_ARG__AUTO_PKG} $2"
     ;;
     *)
