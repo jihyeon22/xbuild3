@@ -46,6 +46,7 @@ echo -e "BUILD TARGET"
 echo -e "--------------------------------------------------"
 echo -e "01. (clr0) kjtec rfid + MDT => CL서버"
 echo -e "02. (clr1) kjtec rfid + MDT => 현대서버"
+echo -e "03. (clr1) kjtec rfid + MDT => CL서버 - 70000건"
 echo -e "--------------------------------------------------"
 echo -e "11. (clra0) kjtec rfid + MDT + 모본 ADAS => CL 서버"
 echo -e "12. (clra1) kjtec rfid + MDT + 모본 ADAS => 현대서버"
@@ -68,6 +69,9 @@ case $SELECT_BUILD in
     ;;
     02)
         BUILD_ARG__SUB="clr1"
+    ;;
+	03)
+        BUILD_ARG__SUB="clr2"
     ;;
     11)
         BUILD_ARG__SUB="clra0"
